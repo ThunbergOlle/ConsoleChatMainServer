@@ -19,21 +19,29 @@ server.on('request', function (req, res) {
         let post = querystring.parse(body);
         console.log(post);
         if(post.emitStatus){
-            
+            let serverID = post.serverID;
+            let serverIP = post.serverIP;
+            if(post.emitStatus === 'true'){
+                online.push(serverIP);
+            }else {
+                online.splice(online.indexOf(serverID), 1);
+                console.log(online)
+            }
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify("success")); 
         }else {
         var servername = post.newserver
-            if(post.newserver){     
-                if(serverList.includes(servername)){
-                console.log("Someone tried to add a server that was already included...");
-                }else {
-                    addServer(servername);
-                }
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify("success"));
-            }else {
+            // if(post.newserver){     
+            //     if(serverList.includes(servername)){
+            //     console.log("Someone tried to add a server that was already included...");
+            //     }else {
+            //         addServer(servername);
+            //     }
+            //     res.writeHead(200, {'Content-Type': 'application/json'});
+            //     res.end(JSON.stringify("success"));
+            // }
             res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(serverList));
-            }
+            res.end(JSON.stringify(online));
         }
 
 
